@@ -2,7 +2,10 @@
 
 TripList helps people plan trips around Angeles City, Pampanga.
 
+Public GitHub repo: https://github.com/brammms/TripList
 Live site: https://hau-6apsi.github.io/TripList/
+
+This project is published in the developer's own public GitHub account, as required for the final project submission.
 
 ## What it does
 
