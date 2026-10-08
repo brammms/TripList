@@ -17,40 +17,35 @@
   padding-top: 3px;
 }
 
-.statuses {
+.statusWrap {
   display: flex;
-  gap: 3px;
+  flex-direction: column;
+  gap: 4px;
   flex-shrink: 0;
-  margin-top: 1px;
-  padding: 2px;
+  min-width: 74px;
+}
+
+.statusLabel {
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  text-align: center;
+}
+
+.statusSelect {
+  appearance: none;
   border: 1px solid var(--color-border);
   border-radius: 7px;
   background: var(--color-paper);
-}
-
-.status {
-  border: 0;
-  border-radius: 5px;
-  padding: 4px 6px;
-  color: var(--color-ink-soft);
-  background: transparent;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.status:hover,
-.active {
   color: var(--color-ink);
-  background: rgba(232, 163, 61, 0.2);
-}
-
-.otw.active {
-  background: rgba(225, 88, 60, 0.16);
-}
-
-.done.active {
-  color: #27602c;
-  background: rgba(143, 217, 134, 0.35);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 8px;
+  min-height: 30px;
+  text-align: center;
 }
 
 .name {
@@ -127,17 +122,54 @@
 
 @media (max-width: 520px) {
   .row {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
   }
 
-  .statuses {
-    order: 3;
-    margin-left: auto;
+  .text {
+    grid-column: 1 / -1;
+    padding: 0 0 2px;
+  }
+
+  .statusWrap {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .statusLabel {
+    text-align: left;
+  }
+
+  .statusSelect {
+    min-width: 104px;
+    min-height: 44px;
+    font-size: 13px;
   }
 
   .start {
-    order: 4;
-    margin-left: auto;
+    grid-column: 2;
+    grid-row: 2;
+    justify-content: center;
+    min-width: 68px;
+    min-height: 44px;
+    font-size: 12px;
+  }
+
+  .remove {
+    grid-column: 3;
+    grid-row: 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin: 0;
   }
 }
 

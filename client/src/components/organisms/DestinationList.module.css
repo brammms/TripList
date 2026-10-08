@@ -51,6 +51,7 @@
 .addRow {
   width: 100%;
   margin-top: 8px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,17 +70,27 @@
   background: rgba(225, 88, 60, 0.06);
 }
 
+.suggestionsHeader {
+  margin-top: 14px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+
 .chipRow {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 12px;
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  min-height: 40px;
   border: 1.5px dashed var(--color-border);
   background: var(--color-paper);
   padding: 7px 13px;

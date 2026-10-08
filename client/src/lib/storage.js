@@ -118,7 +118,7 @@ export function getTrip(id) {
 
 export function createTrip({ name, start, end }) {
   const trips = readAll();
-  const trip = { id: uid(), name, start, end, destinations: [], activities: [], notes: "" };
+  const trip = { id: uid(), name, start, end, destinations: [], activities: [], notes: "", finished: false, completedAt: null };
   trips.push(trip);
   writeAll(trips);
   return trip;

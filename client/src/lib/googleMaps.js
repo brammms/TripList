@@ -4,7 +4,7 @@ export function loadGoogleMaps() {
   if (window.google?.maps) return Promise.resolve(window.google.maps);
 
   const key = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-  if (!key) return Promise.reject(new Error("Missing VITE_GOOGLE_MAPS_API_KEY"));
+  if (!key) return Promise.resolve(null);
   if (mapsPromise) return mapsPromise;
 
   mapsPromise = new Promise((resolve, reject) => {

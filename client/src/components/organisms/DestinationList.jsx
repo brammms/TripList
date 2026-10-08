@@ -49,13 +49,18 @@ export default function DestinationList({ destinations, onToggle, onUpdateStatus
       </button>
 
       {suggestions.length > 0 && (
-        <div className={styles.chipRow}>
-          {suggestions.map((p) => (
-            <button key={p.name} type="button" className={styles.chip} onClick={() => onQuickAdd(p.name)}>
-              <PlusIcon size={12} /> {p.name}
-            </button>
-          ))}
-        </div>
+        <>
+          <div className={styles.suggestionsHeader}>
+            <span>Famous places to go</span>
+          </div>
+          <div className={styles.chipRow}>
+            {suggestions.map((p) => (
+              <button key={p.name} type="button" className={styles.chip} onClick={() => onQuickAdd(p.name)}>
+                <PlusIcon size={12} /> {p.name}
+              </button>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

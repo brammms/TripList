@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, useParams, useNavigate } from "react-router-dom";
+import LandingPage from "./pages/LandingPage.jsx";
 import TripListPage from "./pages/TripListPage.jsx";
 import NewTripPage from "./pages/NewTripPage.jsx";
 import TripPage from "./pages/TripPage.jsx";
@@ -38,7 +39,8 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<TripListPage trips={trips} />} />
+      <Route path="/" element={<LandingPage trips={trips} />} />
+      <Route path="/planner" element={<TripListPage trips={trips} />} />
       <Route path="/trips/new" element={<NewTripPage onCreate={handleCreate} />} />
       <Route path="/trips/:id" element={<TripPageRoute trips={trips} refresh={refresh} dataStore={dataStore} />} />
     </Routes>
@@ -63,6 +65,16 @@ function TripPageRoute({ trips, refresh, dataStore }) {
       }}
       onDeleteTrip={async () => {
         await dataStore.deleteTrip(id);
+        await refresh();
+        navigate("/");
+      }}
+      onFinishTrip={async () => {
+        await dataStore.updateTrip(id, { finished: true, completedAt: new Date().toISOString() });
+        await refresh();
+        navigate("/");
+      }}
+      onReopenTrip={async () => {
+        await dataStore.updateTrip(id, { finished: false, completedAt: null });
         await refresh();
         navigate("/");
       }}

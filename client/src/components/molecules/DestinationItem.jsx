@@ -22,22 +22,24 @@ export default function DestinationItem({ name, notes, address, status, onUpdate
         {address && address !== notes && <div className={styles.address}>{address}</div>}
         {notes && <div className={styles.notes}>{notes}</div>}
       </div>
-      <div className={styles.statuses} role="group" aria-label={`Status for ${name}`}>
-        {STATUS_OPTIONS.map((option) => (
-          <button
-            key={option.value}
-            type="button"
-            className={`${styles.status} ${styles[option.value]} ${status === option.value ? styles.active : ""}`}
-            onClick={() => onUpdateStatus(option.value)}
-            aria-pressed={status === option.value}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
-      <button className={styles.start} type="button" onClick={onStartNavigation} aria-label={`Start navigation to ${name}`}>
+      <label className={styles.statusWrap}>
+        <span className={styles.statusLabel}>Status</span>
+        <select
+          className={styles.statusSelect}
+          value={status}
+          onChange={(e) => onUpdateStatus(e.target.value)}
+          aria-label={`Status for ${name}`}
+        >
+          {STATUS_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      <button className={styles.start} type="button" onClick={onStartNavigation} aria-label={`Open directions to ${name}`}>
         <NavigationIcon size={13} />
-        <span>Start</span>
+        <span>Map</span>
       </button>
       <button className={styles.remove} onClick={onRemove} aria-label={`Remove ${name}`}>
         <TrashIcon size={15} />

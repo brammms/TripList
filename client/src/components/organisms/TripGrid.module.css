@@ -1,13 +1,21 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 420px));
+  justify-content: center;
+  gap: 22px;
   padding-bottom: var(--space-4);
 }
 
 @media (max-width: 767px) {
   .grid {
     grid-template-columns: 1fr;
+    justify-items: center;
+    padding-bottom: 0;
+  }
+
+  .grid > * {
+    width: 100%;
+    max-width: 420px;
   }
 }
 

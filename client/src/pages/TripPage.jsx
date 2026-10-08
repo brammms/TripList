@@ -9,6 +9,7 @@ import AddItemModal from "../components/organisms/AddItemModal.jsx";
 import Button from "../components/atoms/Button.jsx";
 import { CalendarIcon, EditIcon, TrashIcon } from "../lib/icons.jsx";
 import { formatDate } from "../lib/places.js";
+import { isTripFinished } from "../lib/tripStatus.js";
 import styles from "./TripPage.module.css";
 
 /**
@@ -21,6 +22,8 @@ export default function TripPage({
   trip,
   onUpdateTrip,
   onDeleteTrip,
+  onFinishTrip,
+  onReopenTrip,
   onAddDestination,
   onToggleDestination,
   onUpdateDestinationStatus,
@@ -35,7 +38,7 @@ export default function TripPage({
   const [editing, setEditing] = useState(false);
   const [modal, setModal] = useState(null); // "destination" | "activity" | null
   const [notesValue, setNotesValue] = useState(trip?.notes || "");
-  const [savedHint, setSavedHint] = useState("Saved automatically");
+  const [savedHint, setSavedHint] = useState("Saved in this browser");
   const [completionNotice, setCompletionNotice] = useState(false);
   const notesTimer = useRef(null);
   const previousCompleted = useRef(null);
@@ -83,7 +86,7 @@ export default function TripPage({
     clearTimeout(notesTimer.current);
     notesTimer.current = setTimeout(() => {
       onUpdateNotes(value);
-      setSavedHint("Saved automatically");
+      setSavedHint("Saved in this browser");
     }, 400);
   }
 
@@ -91,6 +94,18 @@ export default function TripPage({
     if (window.confirm("Delete this trip? This can't be undone.")) {
       onDeleteTrip();
       navigate("/");
+    }
+  }
+
+  function handleFinishTrip() {
+    if (window.confirm("Finish this trip and return to your dashboard?")) {
+      onFinishTrip();
+    }
+  }
+
+  function handleReopenTrip() {
+    if (window.confirm("Move this trip back to your active trips?")) {
+      onReopenTrip();
     }
   }
 
@@ -134,6 +149,15 @@ export default function TripPage({
               <EditIcon size={15} />
               <span>Edit</span>
             </Button>
+            {isTripFinished(trip) ? (
+              <Button variant="primary" onClick={handleReopenTrip}>
+                <span>Reopen trip</span>
+              </Button>
+            ) : (
+              <Button variant="primary" onClick={handleFinishTrip}>
+                <span>Finish trip</span>
+              </Button>
+            )}
             <Button variant="danger" onClick={handleDelete}>
               <TrashIcon size={15} />
               <span>Delete</span>
@@ -151,7 +175,10 @@ export default function TripPage({
               <span>You finished all {completedDestinations} place{completedDestinations === 1 ? "" : "s"} for {trip.name}.</span>
               <small>{activities.filter((activity) => !activity.done).length ? `${activities.filter((activity) => !activity.done).length} activities still to do.` : "Your activities are complete too."}</small>
             </div>
-            <button type="button" onClick={() => setCompletionNotice(false)} aria-label="Dismiss completion notice">×</button>
+            <div className={styles.noticeActions}>
+              <button type="button" className={styles.noticeButton} onClick={() => navigate("/")}>Back to trips</button>
+              <button type="button" className={styles.dismissButton} onClick={() => setCompletionNotice(false)} aria-label="Dismiss completion notice">×</button>
+            </div>
           </section>
         )}
         <div className={styles.layout}>
@@ -188,7 +215,7 @@ export default function TripPage({
               />
               <div className={styles.notesFooter}>
                 <span className={styles.savedHint}>{savedHint}</span>
-                <span>Autosaves as you type</span>
+                <span>Stored on this device only</span>
               </div>
               <div className={styles.noteStarters}>
                 {[

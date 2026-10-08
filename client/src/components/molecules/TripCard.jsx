@@ -12,6 +12,7 @@ export default function TripCard({
   endDate,
   destinationCount = 0,
   destinationsDone = 0,
+  finished = false,
   onClick,
 }) {
   const progress = destinationCount ? Math.round((destinationsDone / destinationCount) * 100) : 0;
@@ -21,7 +22,7 @@ export default function TripCard({
     : lowerName.includes("heritage") || lowerName.includes("angeles")
       ? "https://commons.wikimedia.org/wiki/Special:FilePath/Angeles%20Heritage%20District.jpg?width=1000"
       : "https://commons.wikimedia.org/wiki/Special:FilePath/Behind%20Marquee%20Mall.jpg?width=1000";
-  const tripState = progress === 100 && destinationCount > 0 ? "Complete" : progress > 0 ? "In progress" : "Ready to plan";
+  const tripState = finished ? "Finished" : progress > 0 ? "In progress" : "Ready to plan";
 
   return (
     <button className={styles.card} onClick={onClick}>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { CompassIcon } from "../../lib/icons.jsx";
-import { googleMapsEmbedUrl, loadGoogleMaps } from "../../lib/googleMaps.js";
+import { googleMapsEmbedUrl, googleMapsSearchUrl, loadGoogleMaps } from "../../lib/googleMaps.js";
 import styles from "./TripMap.module.css";
 
 const FEATURED_PLACES = [
@@ -39,6 +39,10 @@ export default function TripMap({ destinations, onAddDestination }) {
 
     loadGoogleMaps()
       .then(async (maps) => {
+        if (!maps) {
+          setMapError("demo");
+          return;
+        }
         if (disposed) return;
         map = new maps.Map(mapElement.current, {
           center: { lat: 15.145, lng: 120.588 },
@@ -130,7 +134,7 @@ export default function TripMap({ destinations, onAddDestination }) {
         if (locations.filter(Boolean).length > 1) map.fitBounds(bounds, 60);
       })
       .catch((error) => {
-        if (!disposed) setMapError(error.message);
+        if (!disposed) setMapError(error?.message || "demo");
       });
 
     return () => {
@@ -147,13 +151,24 @@ export default function TripMap({ destinations, onAddDestination }) {
     <div className={styles.card}>
       <div className={`${styles.canvas} ${mapError ? styles.fallback : ""}`} ref={mapElement}>
         {mapError ? (
-          <div className={styles.embedFallback}>
-            <iframe
-              title="Google Maps preview for Angeles City"
-              src={googleMapsEmbedUrl("Angeles City, Pampanga")}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+          <div className={styles.offlineMap} role="status">
+            <div className={styles.embedMap}>
+              <iframe
+                title="Angeles City map"
+                src={googleMapsEmbedUrl(destinations[0]?.name || "Angeles City, Pampanga")}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+            </div>
+            <div className={styles.fallbackInfo}>
+              <CompassIcon size={32} />
+              <strong>Angeles City · Pampanga</strong>
+              <span>{mapError === "demo" ? "Real map preview active. Your saved places are still here." : "Live map unavailable. Your saved places are still here."}</span>
+              <a href={googleMapsSearchUrl(destinations[0]?.name || "Angeles City, Pampanga")} target="_blank" rel="noreferrer">
+                Open in Google Maps
+              </a>
+            </div>
           </div>
         ) : null}
         {!mapError && <div className={styles.mapHint}>{destinations.length ? "N Next · O OTW · D Done" : "Featured places in Angeles City"}</div>}
@@ -207,6 +222,21 @@ export default function TripMap({ destinations, onAddDestination }) {
               <span><b>{destinations.filter((d) => (d.status || (d.done ? "done" : "next")) === "next").length}</b> Next</span>
               <span><b>{destinations.filter((d) => (d.status || "next") === "otw").length}</b> OTW</span>
               <span><b>{destinations.filter((d) => (d.status || (d.done ? "done" : "next")) === "done").length}</b> Done</span>
+            </div>
+            <div className={styles.summaryCard}>
+              <span className={styles.detailsLabel}>Where you’ve gone</span>
+              <div className={styles.summaryList}>
+                {destinations.map((destination) => {
+                  const status = destination.status || (destination.done ? "done" : "next");
+                  const statusLabel = status === "next" ? "Next" : status === "otw" ? "OTW" : "Done";
+                  return (
+                    <div key={destination.id || destination.name} className={styles.summaryItem}>
+                      <span className={styles.summaryName}>{destination.name}</span>
+                      <span className={`${styles.summaryBadge} ${styles[status] || ""}`}>{statusLabel}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
             <div className={styles.upcomingList}>
               <span className={styles.detailsLabel}>Up next</span>

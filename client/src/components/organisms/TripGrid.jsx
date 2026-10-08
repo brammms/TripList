@@ -2,13 +2,14 @@ import { useNavigate } from "react-router-dom";
 import TripCard from "../molecules/TripCard.jsx";
 import Button from "../atoms/Button.jsx";
 import { CompassIcon, PlusIcon } from "../../lib/icons.jsx";
+import { isTripFinished } from "../../lib/tripStatus.js";
 import styles from "./TripGrid.module.css";
 
 /**
  * TripGrid — organism
  * Props: trips (array), onNewTrip
  */
-export default function TripGrid({ trips, onNewTrip }) {
+export default function TripGrid({ trips, onNewTrip, emptyTitle = "No trips yet", emptyMessage = "Start with a name and a date range — you can add destinations and activities once the trip is created.", emptyActionLabel = "Plan your first trip" }) {
   const navigate = useNavigate();
 
   if (trips.length === 0) {
@@ -17,12 +18,14 @@ export default function TripGrid({ trips, onNewTrip }) {
         <div className={styles.emptyIcon}>
           <CompassIcon size={26} />
         </div>
-        <h3>No trips yet</h3>
-        <p>Start with a name and a date range — you can add destinations and activities once the trip is created.</p>
-        <Button variant="primary" onClick={onNewTrip}>
-          <PlusIcon size={16} />
-          <span>Plan your first trip</span>
-        </Button>
+        <h3>{emptyTitle}</h3>
+        <p>{emptyMessage}</p>
+        {onNewTrip && (
+          <Button variant="primary" onClick={onNewTrip}>
+            <PlusIcon size={16} />
+            <span>{emptyActionLabel}</span>
+          </Button>
+        )}
       </div>
     );
   }
@@ -41,6 +44,7 @@ export default function TripGrid({ trips, onNewTrip }) {
             endDate={trip.end}
             destinationCount={destinations.length}
             destinationsDone={destinations.filter((d) => (d.status || (d.done ? "done" : "next")) === "done").length}
+            finished={isTripFinished(trip)}
             onClick={() => navigate(`/trips/${trip.id}`)}
           />
         );
