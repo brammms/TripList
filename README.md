@@ -2,6 +2,12 @@
 
 TripList helps people plan trips around Angeles City, Pampanga.
 
+[![AI assistance: substantial](https://img.shields.io/badge/AI%20assistance-substantial-blue)](AI-USAGE.md)
+
+> Built with substantial help from Claude, GitHub Copilot, and GPT. I used them
+> for wireframe ideas, coding help, and explanations. I made the final decisions
+> about the design and system flow. See [AI-USAGE.md](AI-USAGE.md).
+
 Public GitHub repo: https://github.com/brammms/TripList
 Live site: https://hau-6apsi.github.io/TripList/
 
